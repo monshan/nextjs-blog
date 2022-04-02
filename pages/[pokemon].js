@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react"
 import Image from 'next/image'
 import Layout from '../components/layout'
-import {useRouter} from 'next/router'
+import { useRouter } from 'next/router'
+// import useSWR from 'swr'
 
 const Pokemon = (props) => {
     // const [sprite, setSprite] = useState('')
-    const userQuery = useRouter().query.pokemon
+    // const userQuery = useRouter().query.pokemon
 
     // const fetchInfo = async () => {
     //     const res = await fetch('https://pokeapi.co/api/v2/pokemon/' + userQuery)
@@ -20,18 +21,21 @@ const Pokemon = (props) => {
     return (
         <Layout>
             <h1>Here's your {props.userQuery}</h1>
-            {sprite && <img src={props.sprite}/>}
+            <img src={props.sprite}/>
         </Layout>
     ) 
 }
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
     const userQuery = useRouter().query.pokemon
-    const res = await fetch('https://pokeapi.co/api/v2/pokemon/' + userQuery)
+    console.log(userQuery)
+    const res = await fetch('https://pokeapi.co/api/v2/pokemon/ditto')
     const data = await res.json()
     return {
-        sprite: data.sprites.front_default,
-        userQuerey: userQuery
+        props: {
+            sprite: data.sprites.front_default,
+            // userQuerey: userQuery
+        }
     }
 }
 
